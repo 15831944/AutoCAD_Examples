@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TableCreation", "TableCreat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelessDialogs", "ModelessDialogs\ModelessDialogs.csproj", "{EB4F574C-774B-4A78-B769-AC92CA4C05DB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WriteDataNOD", "WriteDataNOD\WriteDataNOD.csproj", "{1F448A0C-B379-4FB1-856E-ABE5F85D0597}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{EB4F574C-774B-4A78-B769-AC92CA4C05DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB4F574C-774B-4A78-B769-AC92CA4C05DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB4F574C-774B-4A78-B769-AC92CA4C05DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F448A0C-B379-4FB1-856E-ABE5F85D0597}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F448A0C-B379-4FB1-856E-ABE5F85D0597}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F448A0C-B379-4FB1-856E-ABE5F85D0597}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F448A0C-B379-4FB1-856E-ABE5F85D0597}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
