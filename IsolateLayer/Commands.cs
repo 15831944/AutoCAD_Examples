@@ -9,31 +9,26 @@ using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Geometry;
 using Autodesk.AutoCAD.Runtime;
 
-[assembly: CommandClass(typeof(ChangeLayerInsideBlock.Commands))]
-namespace ChangeLayerInsideBlock
+
+[assembly: CommandClass(typeof(IsolateLayer.Commands))]
+namespace IsolateLayer
 {
     public class Commands
     {
-        [CommandMethod("CNL")]
-        static public void ChangeLayerInsideBlock()
+        [CommandMethod("IL")]
+        public void IsolateLayer()
         {
             Document doc = Application.DocumentManager.MdiActiveDocument;
             Database db = doc.Database;
             Editor ed = doc.Editor;
 
-            // Collection of our selected entities
+            // Collection of selected entities
             ObjectIdCollection ids = new ObjectIdCollection();
 
-            // The results object for our nested selection
-            // (will be reused)
+            // The results object for nested selection
             PromptNestedEntityResult rs;
 
-            // Start a transaction... will initially be used
-            // to highlight the selected entities and then to
-            // modify their layer
-            Transaction tr = doc.TransactionManager.StartTransaction();
-
-            using (tr)
+            using (Transaction tr = doc.TransactionManager.StartTransaction())
             {
                 // Loop until cancelled or completed
                 do
@@ -45,46 +40,43 @@ namespace ChangeLayerInsideBlock
                         HighlightSubEntity(doc, rs);
                     }
                 }
-
                 while (rs.Status == PromptStatus.OK);
 
                 if (ids.Count > 0)
                 {
-                    // Get the name of our destination later
-                    PromptResult pr = ed.GetString("\nNew layer for these objects: ");
+                    LayerTable lt = tr.GetObject(db.LayerTableId, OpenMode.ForRead) as LayerTable;
 
-                    if (pr.Status == PromptStatus.OK)
+                    for (int i = 0; i < ids.Count; i++)
                     {
-                        // Check that the layer exists
-                        string newLay = pr.StringResult;
+                        // Selected drawing object
+                        Entity ent = tr.GetObject(ids[i], OpenMode.ForRead) as Entity;
 
-                        LayerTable lt = tr.GetObject(db.LayerTableId, OpenMode.ForRead) as LayerTable;
-                        if (lt.Has(newLay))
+                        // LayerTableRecord for each selected entity
+                        LayerTableRecord ltr = tr.GetObject(lt[ent.Layer], OpenMode.ForRead) as LayerTableRecord;
+                        
+                        db.Clayer = lt[ltr.Name];
+
+                        LayerTable layerTable = tr.GetObject(db.LayerTableId, OpenMode.ForRead) as LayerTable;
+                        
+                        foreach (ObjectId id in layerTable)
                         {
-                            // If so, set the layer name to be the one chosen
-                            // on each of the selected entitires
-                            for (int i = 0; i < ids.Count; i++)
+                            LayerTableRecord layerTableRecord = (LayerTableRecord)tr.GetObject(id, OpenMode.ForWrite);
+
+                            if (layerTableRecord.Name != ltr.Name && layerTableRecord.Name != "0")
                             {
-                                Entity ent = tr.GetObject(ids[i], OpenMode.ForWrite) as Entity;
-                                if (ent != null)
-                                {
-                                    ent.Layer = newLay;
-                                }
+                                layerTableRecord.IsFrozen = true;
                             }
                         }
-                        else
-                        {
-                            ed.WriteMessage("\nLayer not found in current drawing.");
-                        }
                     }
-                }
-                tr.Commit();
+                    tr.Commit();
 
-                // Regen clears highlighting and reflects the new layer
-                ed.Regen();
+                    // Regen clears highlighting and reflects the new layer
+                    ed.Regen();
+                }
             }
         }
-
+        
+        
         private static void HighlightSubEntity(Document doc, PromptNestedEntityResult rs)
         {
             // Extract relevant information from the prompt object
@@ -119,5 +111,27 @@ namespace ChangeLayerInsideBlock
             if (ent != null)
                 ent.Highlight(path, false);
         }
+
+
+        /// <summary>
+        ///  This method returns the list of layers
+        /// </summary>
+        /// <param name="db"></param>
+        /// <returns></returns>
+        private List<string> GetLayerNames(Database db)
+        {
+            var layers = new List<string>();
+            using (var tr = db.TransactionManager.StartOpenCloseTransaction())
+            {
+                var layerTable = (LayerTable)tr.GetObject(db.LayerTableId, OpenMode.ForRead);
+                foreach (ObjectId id in layerTable)
+                {
+                    var layer = (LayerTableRecord)tr.GetObject(id, OpenMode.ForRead);
+                    layers.Add(layer.Name.ToUpper());
+                }
+            }
+            return layers;
+        }
+
     }
 }
