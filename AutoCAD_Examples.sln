@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsolateLayer", "IsolateLaye
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChangeLayerInsideBlock", "ChangeLayerInsideBlock\ChangeLayerInsideBlock.csproj", "{7A1409B4-4F1D-404B-9AAC-B95D53CBF44A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWpfPalette", "SimpleWpfPalette\SimpleWpfPalette.csproj", "{6D019C38-B95B-4AC1-9468-256558BE1F65}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{7A1409B4-4F1D-404B-9AAC-B95D53CBF44A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A1409B4-4F1D-404B-9AAC-B95D53CBF44A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A1409B4-4F1D-404B-9AAC-B95D53CBF44A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D019C38-B95B-4AC1-9468-256558BE1F65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D019C38-B95B-4AC1-9468-256558BE1F65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D019C38-B95B-4AC1-9468-256558BE1F65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D019C38-B95B-4AC1-9468-256558BE1F65}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
